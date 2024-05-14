@@ -64,7 +64,7 @@ if (isset($_POST['delete'])) {
          ?>  
 
         <tr>
-          <td><?php echo $counter;?> </td>
+          <td><?php echo $counter++;?> </td>
           <td><?php echo $row['firstname'];?></td>
           <td><?php echo $row['lastname'];?></td>
           <td><?php echo $row['birthday'];?></td>
