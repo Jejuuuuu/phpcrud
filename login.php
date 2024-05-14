@@ -1,7 +1,12 @@
 <?php
 require_once('classes/database.php');
 $con = new database();
+session_start();
  
+if(isset($_SESSION['user'])){
+  header('location:index.php');
+}
+
 if(isset($_POST['login'])){
   $username = $_POST['user'];
   $password = $_POST['password'];
@@ -48,7 +53,7 @@ if(isset($_POST['login'])){
     <div class="container">
       <div class="row gx-1">
         <div class="col"><input type="submit" value="Login" class="btn btn-primary btn-block" name="login"></div>
-        <div class="col"><a href="signup.php" input type="submit" class="btn btn-danger btn-block" name="Signup">Sign Up</a></div>
+        <div class="col"><a href="multisave.php" input type="submit" class="btn btn-danger btn-block" name="Signup">Sign Up</a></div>
       </div>
     </div>
  

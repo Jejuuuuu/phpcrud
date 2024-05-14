@@ -2,6 +2,7 @@
 
 require_once('classes/database.php');
 $con = new database();
+session_start();
 
 $id = $_POST['id'];
 if(empty( $id )) {

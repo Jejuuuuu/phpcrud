@@ -45,7 +45,7 @@ if ($existingUser){
 function insertAddress($user_id, $street, $barangay, $city, $province){
     $con = $this->opencon();
 
-    return $con -> prepare ("INSERT INTO user_address  ( user_id, user_street, user_address, user_barangay, user_city, user_province) VALUES (?,?,?,?,?,?)")
+    return $con -> prepare ("INSERT INTO user_address  ( user_id, user_street, user_barangay, user_city, user_province) VALUES (?,?,?,?,?)")
     ->execute([$user_id, $street, $barangay, $city, $province]);
 }
 function view(){
@@ -74,7 +74,7 @@ return true; //Deletion succesful
 function viewdata($id){
     try{
     $con= $this-> opencon();
-    $query= $con->prepare("SELECT users.user_id,users.firstname,users.lastname,users.birthday,users.sex,users.user,users.pass, user_address.user_street, user_address. user_barangay, user_address.user_city, user_address.user_province FROM user_address INNER JOIN users ON user_address.user_id = users.user_id;WHERE users.user_id=?");
+    $query= $con->prepare("SELECT users.user_id,users.firstname,users.lastname,users.birthday,users.sex,users.user,users.pass, user_address.user_street, user_address. user_barangay, user_address.user_city, user_address.user_province FROM user_address INNER JOIN users ON user_address.user_id = users.user_id WHERE users.user_id=?");
     $query->execute ([$id]);
     return $query->fetch();
     

@@ -3,6 +3,7 @@
 require_once('classes/database.php');
 
 $con = new database();
+
 if (isset($_POST['adduser'])) {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
