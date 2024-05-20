@@ -9,9 +9,9 @@ $error = "";
 if (isset($_POST['multisave'])) {
     
     // Getting the account information
-    $username = $_POST['user'];
+    $username = $_POST['username'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['pass'], PASSWORD_BCRYPT);
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     
     // Getting the personal information
     $firstname = $_POST['firstname'];
@@ -21,9 +21,9 @@ if (isset($_POST['multisave'])) {
   
     // Getting the address information
     $street = $_POST['user_street'];
-    $barangay = $_POST['user_barangay'];
-    $city = $_POST['user_city'];
-    $province = $_POST['user_region'];
+    $barangay = $_POST['barangay_text'];
+    $city = $_POST['city_text'];
+    $province = $_POST['region_text'];
 
     // Handle file upload
     $target_dir = "uploads/";
@@ -38,15 +38,15 @@ if (isset($_POST['multisave'])) {
      $uploadOk = 1;
     
     // Check if file already exists and rename if necessary
-    // Check if file already exists and rename if necessary
-    if (file_exists($target_file)) {
-      // Generate a unique file name by appending a timestamp
-      $new_file_name = pathinfo($original_file_name, PATHINFO_FILENAME) . '_' . time() . '.' . $imageFileType;
-      $target_file = $target_dir . $new_file_name;
-    } else {
-      // Update $target_file with the original file name
-      $target_file = $target_dir . $original_file_name;
-    }
+  // Check if file already exists and rename if necessary
+  if (file_exists($target_file)) {
+    // Generate a unique file name by appending a timestamp
+    $new_file_name = pathinfo($original_file_name, PATHINFO_FILENAME) . '_' . time() . '.' . $imageFileType;
+    $target_file = $target_dir . $new_file_name;
+  } else {
+    // Update $target_file with the original file name
+    $target_file = $target_dir . $original_file_name;
+}
 
     // Check if file is an actual image or fake image
     $check = getimagesize($_FILES["profile_picture"]["tmp_name"]);
@@ -83,7 +83,7 @@ if (isset($_POST['multisave'])) {
                 // Signup successful, insert address into users_address table
                 if ($con->insertAddress($userID, $street, $barangay, $city, $province)) {
                     // Address insertion successful, redirect to login page
-                    header('location:login.php');
+                    header('location:index.php');
                     exit; // Stop further execution
                 } else {
                     // Address insertion failed, display error message
@@ -100,8 +100,6 @@ if (isset($_POST['multisave'])) {
     }
 }
 ?>
-
-
 
 <!doctype html>
 <html lang="en">
@@ -135,7 +133,7 @@ if (isset($_POST['multisave'])) {
         <div class="card-body">
         <div class="form-group">
             <label for="username">Username:</label>
-            <input type="text" class="form-control" name="user" id="user" placeholder="Enter username" required>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Please enter a valid username.</div>
             <div id="usernameFeedback" class="invalid-feedback"></div> <!-- New feedback div -->
@@ -148,14 +146,14 @@ if (isset($_POST['multisave'])) {
           </div>
           <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" class="form-control" name="pass" placeholder="Enter password" required>
+            <input type="password" class="form-control" name="password" placeholder="Enter password" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.</div>
           </div>
 
           <div class="form-group">
             <label for="confirmPassword">Confirm Password:</label>
-            <input type="password" class="form-control" name="pass" placeholder="Re-enter your password" required>
+            <input type="password" class="form-control" name="confirmPassword" placeholder="Re-enter your password" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Please confirm your password.</div>
           </div>
@@ -177,7 +175,7 @@ if (isset($_POST['multisave'])) {
                   <div class="invalid-feedback">Please enter a valid first name.</div>
                 </div>
                 <div class="form-group col-md-6 col-sm-12">
-                  <label for="lastname">Last Name:</label>
+                  <label for="lastName">Last Name:</label>
                   <input type="text" class="form-control" name="lastname" placeholder="Enter last name" required>
                   <div class="valid-feedback">Looks good!</div>
                   <div class="invalid-feedback">Please enter a valid last name.</div>
@@ -224,7 +222,7 @@ if (isset($_POST['multisave'])) {
           <div class="form-group">
             <label class="form-label">Region<span class="text-danger"> *</span></label>
             <select name="user_region" class="form-control form-control-md" id="region"></select>
-            <input type="hidden" class="form-control form-control-md" name="region" id="region-text">
+            <input type="hidden" class="form-control form-control-md" name="region_text" id="region-text">
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Please select a region.</div>
           </div>
@@ -232,14 +230,14 @@ if (isset($_POST['multisave'])) {
             <div class="form-group col-md-6">
               <label class="form-label">Province<span class="text-danger"> *</span></label>
               <select name="user_province" class="form-control form-control-md" id="province"></select>
-              <input type="hidden" class="form-control form-control-md" name="user_province" id="province" required>
+              <input type="hidden" class="form-control form-control-md" name="province_text" id="province-text" required>
               <div class="valid-feedback">Looks good!</div>
               <div class="invalid-feedback">Please select your province.</div>
             </div>
             <div class="form-group col-md-6">
               <label class="form-label">City / Municipality<span class="text-danger"> *</span></label>
               <select name="user_city" class="form-control form-control-md" id="city"></select>
-              <input type="hidden" class="form-control form-control-md" name="user_city" id="city-text" required>
+              <input type="hidden" class="form-control form-control-md" name="city_text" id="city-text" required>
               <div class="valid-feedback">Looks good!</div>
               <div class="invalid-feedback">Please select your city/municipality.</div>
             </div>
@@ -247,7 +245,7 @@ if (isset($_POST['multisave'])) {
           <div class="form-group">
             <label class="form-label">Barangay<span class="text-danger"> *</span></label>
             <select name="user_barangay" class="form-control form-control-md" id="barangay"></select>
-            <input type="hidden" class="form-control form-control-md" name="user_barangay" id="barangay-text" required>
+            <input type="hidden" class="form-control form-control-md" name="barangay_text" id="barangay-text" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Please select your barangay.</div>
           </div>
@@ -370,7 +368,7 @@ function validateStep(step) {
 
   
       function validateInput(input) {
-        if (input.name === 'pass') {
+        if (input.name === 'password') {
           return validatePassword(input);
         } else if (input.name === 'confirmPassword') {
           return validateConfirmPassword(input);
@@ -430,4 +428,4 @@ function validateStep(step) {
   
   </body>
   </html>
-   
+  
