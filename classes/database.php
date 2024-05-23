@@ -44,7 +44,7 @@ class database
         {
             $con = $this->opencon();
             // Save user data along with profile picture path to the database
-            $con->prepare("INSERT INTO users (firstname, lastname, birthday, sex,email, user, pass, user_profile_picture) VALUES (?,?,?,?,?,?,?,?)")->execute([$firstname, $lastname, $birthday, $sex, $email, $username, $password, $profilePicture]);
+            $con->prepare("INSERT INTO users (firstname, lastname, birthday, sex, email, user, pass, user_profile_picture) VALUES (?,?,?,?,?,?,?,?)")->execute([$firstname, $lastname, $birthday, $sex, $email, $username, $password, $profilePicture]);
             return $con->lastInsertId();
             }
 
