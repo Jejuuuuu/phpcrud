@@ -96,9 +96,12 @@ function viewdata($id){
     users.birthday,
     users.sex,
     users.user,
-    users.pass,
-    user_profile_picture, 
-    user_address.user_street, user_address. user_barangay, user_address.user_city, user_address.user_province FROM user_address INNER JOIN users ON user_address.user_id = users.user_id WHERE users.user_id=?");
+    users.pass, users.user_profile_picture, 
+    user_address.user_street, 
+    user_address. 
+    user_barangay, 
+    user_address.user_city, 
+    user_address.user_province FROM user_address INNER JOIN users ON user_address.user_id = users.user_id WHERE users.user_id=?");
     $query->execute ([$id]);
     return $query->fetch();
     
@@ -110,7 +113,7 @@ function updateUser($user_id, $firstname, $lastname, $birthday,$sex, $username, 
     try {
         $con = $this->opencon();
         $con->beginTransaction();
-        $query = $con->prepare("UPDATE users SET user_firstname=?, user_lastname=?,user_birthday=?, user_sex=?,user_name=?, user_pass=? WHERE user_id=?");
+        $query = $con->prepare("UPDATE users SET firstname=?, lastname=?, birthday=?, sex=?, user=?, pass=? WHERE user_id=?");
         $query->execute([$firstname, $lastname,$birthday,$sex,$username, $password, $user_id]);
         // Update successful
         $con->commit();
@@ -121,11 +124,11 @@ function updateUser($user_id, $firstname, $lastname, $birthday,$sex, $username, 
     }
 }
 
-function UpdateUserAdd($user_id, $street, $barangay, $city, $province) {
+function UpdateUserAddress($user_id, $street, $barangay, $city, $province) {
     try {
         $con = $this->opencon();
         $con->beginTransaction();
-        $query = $con->prepare("UPDATE user_address SET street=?, barangay=?, city=?, province=? WHERE user_id=?");
+        $query = $con->prepare("UPDATE user_address SET user_street=?, user_barangay=?, user_city=?, user_province=? WHERE user_id=?");
         $query->execute([$street, $barangay, $city, $province, $user_id]);
         $con->commit();
         return true; // Update successful
@@ -162,10 +165,36 @@ function validateCurrentPassword($userId, $currentPassword) {
     // If no user is found or password is incorrect, return false
     return false;
 }
-function updatePassword($userId, $hashedPassword) {
-    $con = $this->opencon();
-    $query = $con->prepare("UPDATE users SET pass = ? WHERE user_id = ?");
-    return $query->execute([$hashedPassword, $userId]);
-}
+function updatePassword($userId, $hashedPassword){
+    try {
+        $con = $this->opencon();
+        $con->beginTransaction();
+        $query = $con->prepare("UPDATE users SET pass = ? WHERE user_id = ?");
+        $query->execute([$hashedPassword, $userId]);
+        // Update successful
+        $con->commit();
+        return true;
+    } catch (PDOException $e) {
+        // Handle the exception (e.g., log error, return false, etc.)
+         $con->rollBack();
+        return false; // Update failed
+    }
+    }
+
+function updateUserProfilePicture($userID, $profilePicturePath) {
+    try {
+        $con = $this->opencon();
+        $con->beginTransaction();
+        $query = $con->prepare("UPDATE users SET user_profile_picture = ? WHERE user_id = ?");
+        $query->execute([$profilePicturePath, $userID]);
+        // Update successful
+        $con->commit();
+        return true;
+    } catch (PDOException $e) {
+        // Handle the exception (e.g., log error, return false, etc.)
+         $con->rollBack();
+        return false; // Update failed
+    }
+     }
 
 }

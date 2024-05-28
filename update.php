@@ -28,7 +28,7 @@ if (isset($_POST['update'])) {
 if($password==$confirm){
   if($con->UpdateUser($user_id,$firstname,$lastname,$birthday,$sex,$username,$password)){
 
-  if($con->UpdateUserAdd($user_id,$barangay,$street,$city,$province)){
+  if($con->UpdateUserAddress($user_id,$barangay,$street,$city,$province)){
     header('location:index.php');
 
   }else{
